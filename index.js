@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors =require('cors')
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId;
+require('dotenv').config();
 
 const port =5000
 
@@ -14,13 +15,11 @@ app.use(bodyParser.json());
 const password= 'Raaz12345'
 
 
-const uri = "mongodb+srv://Raaz:Raaz12345@cluster0.dtt4b.mongodb.net/voulenteerDb?retryWrites=true&w=majority";
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.dtt4b.mongodb.net/voulenteerDb?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
   const eventCollection = client.db("voulenteerDb").collection("events");
   console.log('db connected successfully')
-
-
   app.post('/addEvennt',(req,res) => {
       const newEvent =req.body;
      eventCollection.insertOne(newEvent)
